@@ -9,23 +9,49 @@ function Item({ option, index, items }) {
     const value = e.target.getAttribute("data-option");
     const all = document.querySelectorAll(`[data-option=${value}]`);
     const allOfTheSameColour = [...all];
+    const allOfTheSameColourIndexes = allOfTheSameColour.map((item) =>
+      parseInt(item.getAttribute("data-index"))
+    );
     const index = e.target.getAttribute("data-index");
-    const allToColour = findNeighbours(parseInt(index));
+    const allToColour = findNeighbours(
+      parseInt(index),
+      allOfTheSameColourIndexes
+    );
     markItems(allOfTheSameColour, allToColour);
   };
 
-  const findNeighbours = (index, allOfTheSameColour) => {
+  const findNeighbours = (index, allOfTheSameColourIndexes) => {
     const girdSize = 36;
     const columns = Math.sqrt(girdSize);
+    let allToColor = [index];
+    let neighbours = [];
+    const track = [];
 
-    const colBefore = index - 1;
-    const colAfter = index + 1;
-    const rowBefore = index - columns;
-    const rowAfter = index + columns;
+    const getIt = (index) => {
+      if (!track.includes(index)) {
+        track.push(index);
+        const colBefore = index - 1;
+        const colAfter = index + 1;
+        const rowBefore = index - columns;
+        const rowAfter = index + columns;
 
-    const neighbours = [colBefore, colAfter, rowBefore, rowAfter];
-    const allToColour = [index, ...neighbours];
-    return allToColour;
+        neighbours = [colBefore, colAfter, rowBefore, rowAfter].filter((item) =>
+          allOfTheSameColourIndexes.includes(item)
+        );
+
+        if (neighbours.length) {
+          neighbours.forEach((item) => {
+            if (!allToColor.includes(item)) {
+              allToColor.push(item);
+            }
+            getIt(item);
+          });
+        }
+      }
+    };
+    getIt(index);
+
+    return allToColor;
   };
 
   const markItems = (allOfTheSameColour, allToColour) => {
@@ -39,6 +65,7 @@ function Item({ option, index, items }) {
       sameColorNeighbour.map((item) => item.classList.remove("blink"));
     }, 2000);
   };
+
   return (
     <div
       data-index={index}
