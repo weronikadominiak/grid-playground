@@ -10,12 +10,14 @@ function getRandomInt(max) {
 
 function Grid({ rows, columns, options }) {
   const amount = rows * columns;
+  const items = [...Array(amount)].map((el) => options[getRandomInt(3)]);
+  console.log(items);
 
   return (
     <div className={styles.grid}>
       {/* TODO: best bnot to use this i here */}
-      {[...Array(amount)].map((item, i) => (
-        <Item key={i} index={i} option={options[getRandomInt(3)]} />
+      {items.map((item, i) => (
+        <Item key={i} index={i} option={items[i]} items={items} />
       ))}
     </div>
   );

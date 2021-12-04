@@ -6,7 +6,7 @@ const options = ["pink", "blue", "orange"];
 function App() {
   return (
     <div className="App">
-      <Grid rows={3} columns={3} options={options} />
+      <Grid rows={6} columns={6} options={options} />
     </div>
   );
 }
