@@ -27,11 +27,25 @@ function Item({ option, index, items }) {
     let neighbours = [];
     const track = [];
 
+    const getEdgeIndexes = (columns) => {
+      const leftEdge = [];
+      const rightEdge = [];
+      [...Array(columns)].forEach((el, i) => {
+        leftEdge.push(i * columns);
+        rightEdge.push(i * columns - 1);
+      });
+
+      return [leftEdge, rightEdge];
+    };
+
+    const [leftEdge, rightEdge] = getEdgeIndexes(columns);
+
     const getIt = (index) => {
       if (!track.includes(index)) {
         track.push(index);
-        const colBefore = index - 1;
-        const colAfter = index + 1;
+        const colBefore = leftEdge.includes(index) ? index : index - 1;
+        const colAfter = rightEdge.includes(index) ? index : index + 1;
+
         const rowBefore = index - columns;
         const rowAfter = index + columns;
 
@@ -73,7 +87,7 @@ function Item({ option, index, items }) {
       className={cx(styles.item, styles[option])}
       onClick={handleClick}
     >
-      {option}
+      {index}
     </div>
   );
 }
