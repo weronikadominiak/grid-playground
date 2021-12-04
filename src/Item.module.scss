@@ -1,0 +1,17 @@
+.item {
+  padding: 16px 8px;
+  border: 1px solid salmon;
+  cursor: pointer;
+
+  &.pink {
+    background-color: lightpink;
+  }
+
+  &.green {
+    background-color: lightgreen;
+  }
+
+  &.blue {
+    background-color: lightblue;
+  }
+}
